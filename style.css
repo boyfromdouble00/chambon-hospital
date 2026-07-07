@@ -272,6 +272,23 @@ ul { list-style: none; }
   font-size: 0.82rem;
 }
 
+/* ═══ Stats / Metrics Bar ═══ */
+.stats-section {
+  background: var(--color-text); color: #fff;
+  padding: 56px 24px;
+}
+.stats-inner {
+  max-width: var(--max-width); margin: 0 auto;
+  display: flex; justify-content: space-around; text-align: center;
+}
+.stat-item { opacity: 0; }
+.stat-number { font-size: clamp(2.4rem, 4.5vw, 3.6rem); font-weight: 800; letter-spacing: -0.02em; }
+.stat-suffix { font-size: 1.2rem; font-weight: 500; color: var(--color-accent); margin-left: 2px; }
+.stat-label {
+  margin-top: 8px; font-size: 0.9rem; color: rgba(255,255,255,0.65);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+
 /* ═══ Animation initial states ═══ */
 .fade-up { opacity: 0; transform: translateY(48px); }
 .fade-up-delayed { opacity: 0; transform: translateY(48px); }
@@ -289,6 +306,8 @@ ul { list-style: none; }
   .nav-links { gap: 20px; }
   .hero-card-right { top: 10%; right: 3%; width: 180px; }
   .hero-card-left { bottom: 12%; left: 2%; width: 160px; }
+  .stats-inner { flex-wrap: wrap; gap: 32px; }
+  .stat-item { flex: 1 1 40%; }
 }
 
 @media (max-width: 640px) {
@@ -302,4 +321,5 @@ ul { list-style: none; }
   .footer-links { gap: 32px; }
   .full-image-wrapper { height: 60vh; }
   .hero-card { display: none; }
+  .stat-item { flex: 1 1 100%; }
 }
