@@ -27,11 +27,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 /* ══════════════════════════════════════════
-   HERO
+   HERO — 3D Equipment Showcase
    ══════════════════════════════════════════ */
 gsap.set('.hero-content > *', { opacity: 0, y: 30 });
 gsap.set('.hero-card', { opacity: 0 });
 
+/* Entrance — cards orbit in from outer edges */
 const heroTL = gsap.timeline({ defaults: { ease: 'power4.out' } });
 heroTL
   .to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.7 }, 0.2)
@@ -39,25 +40,74 @@ heroTL
   .to('.hero-desc', { opacity: 1, y: 0, duration: 0.7 }, 0.8)
   .to('.hero-cta', { opacity: 1, y: 0, duration: 0.6 }, 1.0)
   .fromTo('.hero-card-right',
-    { x: 100, opacity: 0, scale: 0.85, rotate: -3 },
-    { x: 0, opacity: 1, scale: 1, rotate: 0, duration: 1, ease: 'power3.out' }, 0.6)
+    { x: 120, y: -40, opacity: 0, scale: 0.7, rotate: -8, rotateY: 20 },
+    { x: 0, y: 0, opacity: 1, scale: 1, rotate: 0, rotateY: 0, duration: 1.2, ease: 'power3.out' }, 0.55)
   .fromTo('.hero-card-left',
-    { x: -90, opacity: 0, scale: 0.85, rotate: 3 },
-    { x: 0, opacity: 1, scale: 1, rotate: 0, duration: 1, ease: 'power3.out' }, 0.75);
+    { x: -100, y: 40, opacity: 0, scale: 0.7, rotate: 6, rotateY: -18 },
+    { x: 0, y: 0, opacity: 1, scale: 1, rotate: 0, rotateY: 0, duration: 1.2, ease: 'power3.out' }, 0.7);
 
-/* Hero parallax — bg + floating cards drift apart */
-gsap.to('.hero-bg', {
+/* ── Mouse-driven 3D depth ── */
+const hero = document.querySelector('.hero');
+const cardRight = document.querySelector('.hero-card-right');
+const cardLeft = document.querySelector('.hero-card-left');
+const heroBg = document.querySelector('.hero-bg');
+const heroContent = document.querySelector('.hero-content');
+
+hero.addEventListener('mousemove', (e) => {
+  const rect = hero.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5 ~ 0.5
+  const my = (e.clientY - rect.top) / rect.height - 0.5;    // -0.5 ~ 0.5
+
+  /* BG shifts subtly opposite to mouse */
+  gsap.to(heroBg, {
+    x: mx * -12, y: my * -12,
+    duration: 1.2, ease: 'power2.out',
+  });
+
+  /* Right card orbits in 3D — follows mouse with depth */
+  gsap.to(cardRight, {
+    x: mx * 50, y: my * 50,
+    rotateY: mx * 14, rotateX: -my * 10, rotate: mx * -3,
+    z: 20,
+    duration: 1, ease: 'power2.out',
+  });
+
+  /* Left card orbits opposite — creates depth contrast */
+  gsap.to(cardLeft, {
+    x: mx * -40, y: my * -40,
+    rotateY: mx * -12, rotateX: my * 8, rotate: mx * 4,
+    z: 15,
+    duration: 1.1, ease: 'power2.out',
+  });
+
+  /* Content shifts slightly with mouse */
+  gsap.to(heroContent, {
+    x: mx * 16, y: my * 16,
+    duration: 1.5, ease: 'power2.out',
+  });
+});
+
+/* Reset on mouse leave — slow drift back */
+hero.addEventListener('mouseleave', () => {
+  gsap.to([heroBg, cardRight, cardLeft, heroContent], {
+    x: 0, y: 0, rotateY: 0, rotateX: 0, rotate: 0, z: 0,
+    duration: 2.5, ease: 'power3.out',
+  });
+});
+
+/* ── Scroll parallax — cards drift apart on scroll ── */
+gsap.to(heroBg, {
   y: '10%', scale: 1.06,
   ease: 'none',
   scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.3 },
 });
-gsap.to('.hero-card-right', {
-  y: '-16%', x: '-6%', rotate: -1,
+gsap.to(cardRight, {
+  y: '-18%', x: '-8%', rotate: -2, rotateY: 6,
   ease: 'none',
   scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.8 },
 });
-gsap.to('.hero-card-left', {
-  y: '18%', x: '7%', rotate: 1,
+gsap.to(cardLeft, {
+  y: '20%', x: '8%', rotate: 3, rotateY: -5,
   ease: 'none',
   scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.0 },
 });
