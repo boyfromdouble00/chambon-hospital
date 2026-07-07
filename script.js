@@ -56,11 +56,15 @@ heroTL
   .to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.8 }, 0.1)
   .to('.hero-title-line', { opacity: 1, y: 0, duration: 0.9, stagger: 0.2 }, 0.3)
   .to('.hero-desc', { opacity: 1, y: 0, duration: 0.8 }, 0.7)
-  .to('.hero-cta', { opacity: 1, y: 0, duration: 0.7 }, 0.9);
+  .to('.hero-cta', { opacity: 1, y: 0, duration: 0.7 }, 0.9)
+  /* Equipment cards slide in from edges */
+  .fromTo('.hero-card-right', { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.5)
+  .fromTo('.hero-card-left', { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.65);
 
 /* ── Hero Parallax ── */
-gsap.to('.hero-images', {
-  y: '8%',
+/* Main background subtle move */
+gsap.to('.hero-bg', {
+  y: '6%',
   ease: 'none',
   scrollTrigger: {
     trigger: '.hero',
@@ -70,17 +74,17 @@ gsap.to('.hero-images', {
   },
 });
 
-/* Each image layer moves at different speed */
-document.querySelectorAll('.hero-img-layer').forEach((layer) => {
-  const depth = parseFloat(layer.dataset.depth) || 0.5;
-  gsap.to(layer, {
-    y: `${depth * 12}%`,
+/* Floating cards parallax (image 2 right, image 3 left) */
+document.querySelectorAll('.hero-card').forEach((card) => {
+  const speed = parseFloat(card.dataset.speed) || 0.5;
+  gsap.to(card, {
+    y: `${speed * 18}%`,
     ease: 'none',
     scrollTrigger: {
       trigger: '.hero',
       start: 'top top',
       end: 'bottom top',
-      scrub: 0.8 + depth * 0.8,
+      scrub: 0.8 + speed * 0.6,
     },
   });
 });

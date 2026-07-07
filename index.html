@@ -31,18 +31,21 @@
 
   <!-- Hero Section -->
   <section class="hero" id="hero">
-    <div class="hero-images">
-      <div class="hero-img-layer" data-depth="0.3">
-        <img src="images/1.png" alt="의료장비" loading="eager" fetchpriority="high">
-      </div>
-      <div class="hero-img-layer" data-depth="0.5">
-        <img src="images/2.png" alt="의료장비" loading="eager">
-      </div>
-      <div class="hero-img-layer" data-depth="0.8">
-        <img src="images/3.png" alt="의료장비" loading="lazy">
-      </div>
+    <!-- Main full-bleed background: image 1 -->
+    <div class="hero-bg">
+      <img src="images/1.png" alt="참본 정형외과 의료장비" loading="eager" fetchpriority="high">
     </div>
     <div class="hero-overlay"></div>
+
+    <!-- Floating equipment cards: images 2 & 3 -->
+    <div class="hero-card hero-card-right" data-speed="0.6">
+      <img src="images/2.png" alt="정밀 진단 장비" loading="eager">
+    </div>
+    <div class="hero-card hero-card-left" data-speed="0.4">
+      <img src="images/3.png" alt="의료 영상 장비" loading="eager">
+    </div>
+
+    <!-- Text content -->
     <div class="hero-content">
       <p class="hero-subtitle">서울 ○○구 · 정형외과 전문의</p>
       <h1 class="hero-title">
