@@ -188,11 +188,14 @@ ul { list-style: none; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  perspective: 800px;
 }
 .treatment-card {
   background: var(--color-bg); border-radius: var(--radius);
   padding: 36px 28px; box-shadow: var(--shadow-card);
-  transition: transform 0.35s, box-shadow 0.35s;
+  transition: box-shadow 0.35s;
+  will-change: transform;
+  transform-style: preserve-3d;
 }
 .treatment-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-elevated); }
 .card-icon { font-size: 2rem; margin-bottom: 16px; }
