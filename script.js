@@ -53,45 +53,55 @@ const cardLeft = document.querySelector('.hero-card-left');
 const heroBg = document.querySelector('.hero-bg');
 const heroContent = document.querySelector('.hero-content');
 
+/* Auto-float — cards drift gently even without mouse, like equipment on a turntable */
+const autoFloat = gsap.timeline({ repeat: -1, yoyo: true, ease: 'sine.inOut' });
+autoFloat
+  .to(cardRight, { x: 18, y: -14, rotate: 1.2, rotateY: 3, duration: 6 }, 0)
+  .to(cardLeft, { x: -14, y: 12, rotate: -0.8, rotateY: -2.5, duration: 7 }, 0.5)
+  .to(heroBg, { x: 6, y: -6, duration: 8 }, 0);
+
 hero.addEventListener('mousemove', (e) => {
+  autoFloat.pause(); /* stop auto-float while mouse is active */
+
   const rect = hero.getBoundingClientRect();
-  const mx = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5 ~ 0.5
-  const my = (e.clientY - rect.top) / rect.height - 0.5;    // -0.5 ~ 0.5
+  const mx = (e.clientX - rect.left) / rect.width - 0.5;
+  const my = (e.clientY - rect.top) / rect.height - 0.5;
 
-  /* BG shifts subtly opposite to mouse */
+  /* BG shifts opposite to mouse */
   gsap.to(heroBg, {
-    x: mx * -12, y: my * -12,
-    duration: 1.2, ease: 'power2.out',
-  });
-
-  /* Right card orbits in 3D — follows mouse with depth */
-  gsap.to(cardRight, {
-    x: mx * 50, y: my * 50,
-    rotateY: mx * 14, rotateX: -my * 10, rotate: mx * -3,
-    z: 20,
+    x: mx * -30, y: my * -30,
     duration: 1, ease: 'power2.out',
   });
 
-  /* Left card orbits opposite — creates depth contrast */
-  gsap.to(cardLeft, {
-    x: mx * -40, y: my * -40,
-    rotateY: mx * -12, rotateX: my * 8, rotate: mx * 4,
-    z: 15,
-    duration: 1.1, ease: 'power2.out',
+  /* Right card — orbits in 3D, strongly follows mouse */
+  gsap.to(cardRight, {
+    x: mx * 120, y: my * 120,
+    rotateY: mx * 28, rotateX: -my * 22, rotate: mx * -6,
+    z: 40,
+    duration: 0.8, ease: 'power2.out',
   });
 
-  /* Content shifts slightly with mouse */
+  /* Left card — orbits opposite direction for depth contrast */
+  gsap.to(cardLeft, {
+    x: mx * -90, y: my * -100,
+    rotateY: mx * -22, rotateX: my * 18, rotate: mx * 8,
+    z: 25,
+    duration: 0.9, ease: 'power2.out',
+  });
+
+  /* Text moves slightly with mouse */
   gsap.to(heroContent, {
-    x: mx * 16, y: my * 16,
-    duration: 1.5, ease: 'power2.out',
+    x: mx * 30, y: my * 30,
+    duration: 1.3, ease: 'power2.out',
   });
 });
 
-/* Reset on mouse leave — slow drift back */
+/* Mouse leaves — resume auto-float */
 hero.addEventListener('mouseleave', () => {
   gsap.to([heroBg, cardRight, cardLeft, heroContent], {
     x: 0, y: 0, rotateY: 0, rotateX: 0, rotate: 0, z: 0,
-    duration: 2.5, ease: 'power3.out',
+    duration: 2, ease: 'power3.out',
+    onComplete: () => autoFloat.play(),
   });
 });
 
